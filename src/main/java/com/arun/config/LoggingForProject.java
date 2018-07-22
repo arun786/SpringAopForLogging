@@ -19,17 +19,17 @@ import java.util.Arrays;
 public class LoggingForProject {
     private static final Logger logger = LoggerFactory.getLogger(LoggingForProject.class);
 
-    @Before("execution(* com.arun.service.StudentServiceImpl.*(..))")
+    @Before("execution(* com.arun.service.StudentService.*(..))")
     public void before(JoinPoint joinPoint) {
         logger.info("Before method call {} with argument/s {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
     }
 
-    @After("execution(* com.arun.service.StudentServiceImpl.*(..))")
+    @After("execution(* com.arun.service.StudentService.*(..))")
     public void after(JoinPoint joinPoint) {
         logger.info("After method call {} with argument/s {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
     }
 
-    @AfterReturning(pointcut = "execution(* com.arun.service.StudentServiceImpl.*(..))", returning = "result")
+    @AfterReturning(pointcut = "execution(* com.arun.service.StudentService.*(..))", returning = "result")
     public void afterReturn(JoinPoint joinPoint, Object result) {
         logger.info("After method call {} with argument/s {}, returning {}",
                 joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()), result);

@@ -12,7 +12,11 @@ public class StudentServiceImpl implements StudentService {
     private Student student;
 
     @Override
-    public Student getStudentBasedOnId(String id) {
-        return new Student("1", "Arun", "23", "scottsdale");
+    public Student getStudentBasedOnId(String id) throws Exception {
+        Student student = new Student("1", "Arun", "23", "scottsdale");
+        if (id.equals("2")) {
+            throw new Exception("Test Exception");
+        }
+        return student;
     }
 }

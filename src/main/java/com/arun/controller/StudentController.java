@@ -18,7 +18,7 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping("students/v1/student/{id}")
-    public ResponseEntity<Student> getStudentBasedOnId(@PathVariable String id) {
+    public ResponseEntity<Student> getStudentBasedOnId(@PathVariable String id) throws Exception {
         Student studentBasedOnId = studentService.getStudentBasedOnId(id);
         return new ResponseEntity<>(studentBasedOnId, HttpStatus.OK);
     }

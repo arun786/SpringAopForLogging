@@ -16,23 +16,23 @@ import java.util.Arrays;
 public class LoggingForProject {
     private static final Logger logger = LoggerFactory.getLogger(LoggingForProject.class);
 
-    @Before("within(com.arun.service.*)")
+    @Before("@annotation(com.arun.config.RsLogging)")
     public void before(JoinPoint joinPoint) {
         logger.info("Before method call {} with argument/s {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
     }
 
-    @After("within(com.arun.service.*)")
+    @After("@annotation(com.arun.config.RsLogging)")
     public void after(JoinPoint joinPoint) {
         logger.info("After method call {} with argument/s {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
     }
 
-    @AfterReturning(pointcut = "within(com.arun.service.*)", returning = "result")
+    @AfterReturning(pointcut = "@annotation(com.arun.config.RsLogging)", returning = "result")
     public void afterReturn(JoinPoint joinPoint, Object result) {
         logger.info("After method call {} with argument/s {}, returning {}",
                 joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()), result);
     }
 
-    @AfterThrowing(pointcut = "within(com.arun.service.*)", throwing = "e")
+    @AfterThrowing(pointcut = "@annotation(com.arun.config.RsLogging)", throwing = "e")
     public void afterThrow(Exception e) {
         logger.info("Throwing exception : {}", e.getMessage());
     }

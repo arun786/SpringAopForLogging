@@ -82,3 +82,99 @@
             logger.info("Throwing exception : {}", e.getMessage());
         }
     }
+# use of annotation
+## Define an annotation
+
+    package com.arun.config;
+    
+    import java.lang.annotation.ElementType;
+    import java.lang.annotation.Retention;
+    import java.lang.annotation.RetentionPolicy;
+    import java.lang.annotation.Target;
+    
+    /**
+     * Created by Adwiti on 7/23/2018.
+     */
+    @Target({ElementType.TYPE, ElementType.METHOD})
+    @Retention(RetentionPolicy.RUNTIME)
+    public @interface RsLogging {
+    }
+
+## Define a class with Aspect 
+
+    package com.arun.config;
+    
+    import org.aspectj.lang.JoinPoint;
+    import org.aspectj.lang.annotation.*;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.stereotype.Component;
+    
+    import java.util.Arrays;
+    
+    /**
+     * Created by Adwiti on 7/22/2018.
+     */
+    @Aspect
+    @Component
+    public class LoggingForProject {
+        private static final Logger logger = LoggerFactory.getLogger(LoggingForProject.class);
+    
+        @Before("@annotation(com.arun.config.RsLogging)")
+        public void before(JoinPoint joinPoint) {
+            logger.info("Before method call {} with argument/s {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+        }
+    
+        @After("@annotation(com.arun.config.RsLogging)")
+        public void after(JoinPoint joinPoint) {
+            logger.info("After method call {} with argument/s {}", joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()));
+        }
+    
+        @AfterReturning(pointcut = "@annotation(com.arun.config.RsLogging)", returning = "result")
+        public void afterReturn(JoinPoint joinPoint, Object result) {
+            logger.info("After method call {} with argument/s {}, returning {}",
+                    joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()), result);
+        }
+    
+        @AfterThrowing(pointcut = "@annotation(com.arun.config.RsLogging)", throwing = "e")
+        public void afterThrow(Exception e) {
+            logger.info("Throwing exception : {}", e.getMessage());
+        }
+    }
+
+## Annotate the methods where logging is required
+    package com.arun.service;
+    
+    import com.arun.config.RsLogging;
+    import com.arun.model.Student;
+    import org.springframework.stereotype.Service;
+    
+    /**
+     * Created by Adwiti on 7/22/2018.
+     */
+    @Service
+    public class StudentServiceImpl implements StudentService {
+    
+        private Student student;
+    
+        @Override
+        @RsLogging
+        public Student getStudentBasedOnId(String id) throws Exception {
+            Student student = new Student("1", "Arun", "23", "scottsdale");
+            if (id.equals("2")) {
+                throw new Exception("Test Exception");
+            }
+            return student;
+        }
+    }
+
+# types of pointcut
+
+    execution(* PACKAGE.*(..))
+    
+    first wildcard is for any return type.
+    second wildcard is for any class.
+    third wildcard is for any method of any class in that package
+    (..) pattern matches any number of argument.
+    
+    

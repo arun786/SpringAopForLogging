@@ -20,4 +20,10 @@ public class PointCutUsingWithin {
     public void beforeMethodCall(JoinPoint joinPoint) {
         logger.info("calling method {}", joinPoint.getSignature().getName());
     }
+
+    @Before("@within(org.springframework.stereotype.Service)")
+    public void beforeMethodCallForService(JoinPoint joinPoint) {
+        logger.info("Service steroeType call {} ", joinPoint.getSignature().getName());
+
+    }
 }

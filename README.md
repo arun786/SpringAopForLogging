@@ -234,3 +234,12 @@
             logger.info("calling method {}", joinPoint.getSignature().getName());
         }
     }
+
+
+## to Specify based on stereoType
+
+    @Before("@within(org.springframework.stereotype.Service)")
+        public void beforeMethodCallForService(JoinPoint joinPoint) {
+            logger.info("Service steroeType call {} ", joinPoint.getSignature().getName());
+    
+        }

@@ -243,3 +243,17 @@
             logger.info("Service steroeType call {} ", joinPoint.getSignature().getName());
     
         }
+        
+ 
+## to log the time for a method.
+
+we will be using RsLogging annotation
+
+    @Around("@annotation(com.arun.config.RsLogging)")
+        public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+            long start = System.currentTimeMillis();
+            Object proceed = joinPoint.proceed();
+            long executionTime = System.currentTimeMillis() - start;
+            logger.info("{} executed in {} ms", joinPoint.getSignature(), executionTime);
+            return proceed;
+        }

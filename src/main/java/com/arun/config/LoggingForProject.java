@@ -1,6 +1,7 @@
 package com.arun.config;
 
 import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +33,12 @@ public class LoggingForProject {
                 joinPoint.getSignature().getName(), Arrays.toString(joinPoint.getArgs()), result);
     }
 
-    @AfterThrowing(pointcut = "@annotation(com.arun.config.RsLogging)", throwing = "e")
-    public void afterThrow(Exception e) {
-        logger.info("Throwing exception : {}", e.getMessage());
+    @Around("@annotation(com.arun.config.RsLogging)")
+    public Object logExecutionTime(ProceedingJoinPoint joinPoint) throws Throwable {
+        long start = System.currentTimeMillis();
+        Object proceed = joinPoint.proceed();
+        long executionTime = System.currentTimeMillis() - start;
+        logger.info("{} executed in {} ms", joinPoint.getSignature(), executionTime);
+        return proceed;
     }
 }
